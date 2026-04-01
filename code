@@ -1,0 +1,123 @@
+function setup() {
+  createCanvas(400, 400);
+}
+
+function draw() {
+  background(220); // Light gray background
+
+  // 1. Hair (Back Layer)
+  fill(200, 50, 20); // Deep Red
+  noStroke();
+  ellipse(200, 180, 240, 280); // Back of the hair
+
+  // 2. Face
+  fill(255, 245, 235); // White/Pale skin tone
+  stroke(0);
+  strokeWeight(1);
+  ellipse(200, 200, 180, 220); // Head shape
+
+  // 3. Hair (Bangs/Front Layer)
+  fill(200, 50, 20); 
+  noStroke();
+  arc(200, 160, 180, 150, PI, TWO_PI); // Forehead hair
+
+  // 4. Eyes
+  // Whites of eyes
+  fill(255);
+  stroke(0);
+  ellipse(165, 190, 40, 25); // Left
+  ellipse(235, 190, 40, 25); // Right
+
+  // Irises (Green)
+  fill(34, 139, 34); // Forest Green
+  circle(165, 190, 22); 
+  circle(235, 190, 22);
+
+  // Pupils
+  fill(0);
+  circle(165, 190, 10);
+  circle(235, 190, 10);
+
+  // 5. Nose
+  noFill();
+  stroke(200, 150, 150); // Soft reddish-brown
+  strokeWeight(2);
+  bezier(195, 210, 205, 230, 210, 230, 210, 225);
+
+  // 6. Mouth
+  fill(220, 100, 100); // Pinkish red
+  noStroke();
+  arc(200, 260, 60, 40, 0, PI); // Happy smile
+}
+let posX = 0;      // For X-axis movement
+let posY = 0;      // For Y-axis movement
+let diagX = 0;     // For Diagonal X
+let diagY = 0;     // For Diagonal Y
+
+let speedX, speedY, speedDiagX, speedDiagY;
+let titleSize = 30;
+let angle = 0;
+
+function setup() {
+  createCanvas(400, 400);
+  // Assigning different random speeds
+  speedX = random(1, 3);
+  speedY = random(1, 3);
+  speedDiagX = random(1, 4);
+  speedDiagY = random(1, 4);
+}
+
+function draw() {
+  background(220);
+
+  // --- LOGIC: Movement Calculations ---
+  posX += speedX;
+  if (posX > 20 || posX < -20) speedX *= -1; // Bounce X
+
+  posY += speedY;
+  if (posY > 15 || posY < -15) speedY *= -1; // Bounce Y
+  
+  diagX += speedDiagX;
+  diagY += speedDiagY;
+  if (diagX > 30 || diagX < -30) speedDiagX *= -1; // Bounce Diagonal
+  if (diagY > 30 || diagY < -30) speedDiagY *= -1;
+
+  // --- LOGIC: Title Scaling ---
+  // sin() fluctuates between -1 and 1. We map that to a size range.
+  titleSize = map(sin(angle), -1, 1, 20, 50);
+  angle += 0.05; 
+
+  // 1. Title
+  textAlign(CENTER);
+  textSize(titleSize);
+  fill(0);
+  text("Self Portrait", 200, 50);
+
+  // 2. Hair (Back Layer) - Moves DIAGONALLY (X and Y)
+  fill(200, 50, 20);
+  noStroke();
+  ellipse(200 + diagX, 180 + diagY, 240, 280);
+
+  // 3. Face - Static Base
+  fill(255, 245, 235);
+  stroke(0);
+  ellipse(200, 200, 180, 220);
+
+  // 4. Eyes - Moving on X-AXIS
+  fill(255);
+  ellipse(165 + posX, 190, 40, 25); // Left Eye
+  ellipse(235 + posX, 190, 40, 25); // Right Eye
+  fill(34, 139, 34);
+  circle(165 + posX, 190, 22);
+  circle(235 + posX, 190, 22);
+
+  // 5. Blushed Cheeks - Moving on Y-AXIS
+  fill(255, 200, 200, 150);
+  noStroke();
+  ellipse(150, 230 + posY, 40, 20); // Left Cheek
+  ellipse(250, 230 + posY, 40, 20); // Right Cheek
+
+  // 6. Mouth - Static
+  fill(220, 100, 100);
+  arc(200, 260, 60, 40, 0, PI);
+}
